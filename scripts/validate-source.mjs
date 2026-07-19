@@ -18,6 +18,23 @@ for (const file of publicFiles) {
   if (file !== '.nojekyll' && fs.statSync(file).size === 0) throw new Error(`Zero-byte public artifact: ${file}`);
 }
 
+function walk(directory = '.') {
+  const found = [];
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    if (['.git', 'node_modules', 'test-results'].includes(entry.name)) continue;
+    const relative = path.join(directory, entry.name).replace(/^\.\//, '');
+    if (entry.isDirectory()) found.push(...walk(relative));
+    else found.push(relative);
+  }
+  return found;
+}
+
+const completeTree = walk();
+const treeTextFiles = completeTree.filter(file => publicTextExtensions.has(path.extname(file)));
+const sourceText = treeTextFiles
+  .map(file => `\n--- ${file} ---\n${fs.readFileSync(file, 'utf8')}`)
+  .join('\n');
+
 const logoPath = 'assets/brand/highmark-standalone.png';
 if (fs.statSync(logoPath).size < 1000) throw new Error('Highmark logo missing or too small');
 if (fs.statSync('assets/brand/favicon.png').size < 500) throw new Error('Favicon missing or too small');
@@ -26,11 +43,6 @@ const tokens = fs.readFileSync('brand-tokens.css', 'utf8').toLowerCase();
 for (const token of ['#008dd1', '#003963', '#00a2e2', '#0cb161', '#f7987d']) {
   if (!tokens.includes(token)) throw new Error(`Missing brand token ${token}`);
 }
-
-const sourceText = publicFiles
-  .filter(file => publicTextExtensions.has(path.extname(file)))
-  .map(file => `\n--- ${file} ---\n${fs.readFileSync(file, 'utf8')}`)
-  .join('\n');
 
 const forbidden = [
   /role\s*[-_ ]?\s*forge/i,
@@ -45,6 +57,9 @@ const forbidden = [
 ];
 for (const pattern of forbidden) {
   if (pattern.test(sourceText)) throw new Error(`Forbidden candidate-facing text matched: ${pattern}`);
+}
+for (const file of completeTree) {
+  if (/role[-_ ]?forge/i.test(file)) throw new Error(`Forbidden candidate-facing filename: ${file}`);
 }
 
 const index = fs.readFileSync('index.html', 'utf8');
@@ -79,7 +94,11 @@ for (const [file, reciprocal] of documents) {
   if (reciprocal && !html.includes(`href="${reciprocal}"`)) throw new Error(`${file}: missing reciprocal link to ${reciprocal}`);
 }
 
-const assetRefs = [...sourceText.matchAll(/(?:src|href)="([^"]+)"/g)].map(match => match[1]);
+const assetSource = treeTextFiles
+  .filter(file => ['.html', '.css', '.js'].includes(path.extname(file)))
+  .map(file => fs.readFileSync(file, 'utf8'))
+  .join('\n');
+const assetRefs = [...assetSource.matchAll(/(?:src|href)="([^"]+)"/g)].map(match => match[1]);
 for (const ref of assetRefs) {
   if (/^https?:\/\//i.test(ref)) continue;
   if (/^(?:#|mailto:|tel:|javascript:)/i.test(ref)) continue;
@@ -89,6 +108,7 @@ for (const ref of assetRefs) {
 }
 
 console.log(`manifest: ${publicFiles.length} artifacts present`);
+console.log(`complete public text scan: ${treeTextFiles.length} files`);
 console.log('brand fidelity source checks: passed');
 console.log('candidate-facing confidentiality: passed');
 console.log('document contact and navigation checks: passed');
