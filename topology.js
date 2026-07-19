@@ -1,4 +1,4 @@
-import * as THREE from './assets/vendor/three/three.module.min.js';
+let THREE;
 import {
   DEFAULT_SCENARIO_ID,
   PLANE_LABELS,
@@ -11,13 +11,7 @@ const status = document.querySelector('[data-topology-status]');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const planeKeys = ['workflow', 'evidence', 'authority', 'adoption', 'value'];
 const planeColors = [0x00a2e2, 0x21d9e7, 0xf7987d, 0xb79bff, 0x8bd450];
-const planePositions = [
-  new THREE.Vector3(-1.55, 1.25, 2.8),
-  new THREE.Vector3(-0.75, 0.65, 1.4),
-  new THREE.Vector3(0, 0.03, 0),
-  new THREE.Vector3(0.75, -0.62, -1.4),
-  new THREE.Vector3(1.55, -1.22, -2.8)
-];
+let planePositions = [];
 
 let renderer;
 let scene;
@@ -29,8 +23,26 @@ let activeAnimation = 0;
 let selectedScenario = getScenario(DEFAULT_SCENARIO_ID);
 let disposed = false;
 let fallbackMode = false;
+let mobileMode = false;
+let mobileSettleTimer;
 const planeLabels = [];
 const nodeMeshes = new Map();
+
+function initializePlanePositions() {
+  planePositions = [
+    new THREE.Vector3(-1.55, 1.25, 2.8),
+    new THREE.Vector3(-0.75, 0.65, 1.4),
+    new THREE.Vector3(0, 0.03, 0),
+    new THREE.Vector3(0.75, -0.62, -1.4),
+    new THREE.Vector3(1.55, -1.22, -2.8)
+  ];
+}
+
+function shouldUseMobileTopology() {
+  const narrow = matchMedia('(max-width: 700px)').matches;
+  const handheld = matchMedia('(pointer: coarse)').matches && matchMedia('(max-width: 932px)').matches;
+  return narrow || handheld;
+}
 
 function createPlaneLabel(key, text) {
   const element = document.createElement('div');
@@ -241,9 +253,111 @@ function resize() {
 
 function loop() {
   if (disposed || !renderer) return;
-  projectLabels();
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
+}
+
+function mobilePoint(scenario, planeIndex) {
+  const item = scenario.path[planeIndex];
+  const y = 42 + planeIndex * 76;
+  const x = 280 + (item.x / 1.35) * 48;
+  return { x, y };
+}
+
+function renderMobileTopology(scenario) {
+  host.querySelector('.mobile-topology')?.remove();
+  clearTimeout(mobileSettleTimer);
+  const namespace = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(namespace, 'svg');
+  svg.setAttribute('class', 'mobile-topology');
+  svg.setAttribute('viewBox', '0 0 360 372');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', `${scenario.title}: five-condition AI value path`);
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="mobile-route-gradient" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#00a2e2"/>
+        <stop offset="0.52" stop-color="#f7987d"/>
+        <stop offset="1" stop-color="#8bd450"/>
+      </linearGradient>
+      <marker id="mobile-route-arrow" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L6,3 z" fill="#8bd450"/>
+      </marker>
+    </defs>
+  `;
+
+  const planeGroup = document.createElementNS(namespace, 'g');
+  planeGroup.setAttribute('class', 'mobile-planes');
+  const nodeGroup = document.createElementNS(namespace, 'g');
+  nodeGroup.setAttribute('class', 'mobile-nodes');
+
+  planeKeys.forEach((key, planeIndex) => {
+    const y = 13 + planeIndex * 76;
+    const row = document.createElementNS(namespace, 'rect');
+    row.setAttribute('x', '10');
+    row.setAttribute('y', String(y));
+    row.setAttribute('width', '340');
+    row.setAttribute('height', '58');
+    row.setAttribute('rx', '2');
+    row.setAttribute('class', `mobile-plane mobile-plane-${key}`);
+    planeGroup.append(row);
+
+    const indexLabel = document.createElementNS(namespace, 'text');
+    indexLabel.setAttribute('x', '24');
+    indexLabel.setAttribute('y', String(y + 20));
+    indexLabel.setAttribute('class', 'mobile-plane-index');
+    indexLabel.textContent = `0${planeIndex + 1}`;
+    planeGroup.append(indexLabel);
+
+    const label = document.createElementNS(namespace, 'text');
+    label.setAttribute('x', '53');
+    label.setAttribute('y', String(y + 20));
+    label.setAttribute('class', 'mobile-plane-label');
+    label.setAttribute('data-mobile-plane-label', key);
+    label.textContent = PLANE_LABELS[key];
+    planeGroup.append(label);
+
+    const step = document.createElementNS(namespace, 'text');
+    step.setAttribute('x', '24');
+    step.setAttribute('y', String(y + 43));
+    step.setAttribute('class', 'mobile-plane-step');
+    step.textContent = scenario.path[planeIndex].label;
+    planeGroup.append(step);
+
+    for (const candidate of SCENARIOS) {
+      const point = mobilePoint(candidate, planeIndex);
+      const circle = document.createElementNS(namespace, 'circle');
+      circle.setAttribute('cx', String(point.x));
+      circle.setAttribute('cy', String(point.y));
+      circle.setAttribute('r', candidate.id === scenario.id ? '6.5' : '2.7');
+      circle.setAttribute('class', candidate.id === scenario.id ? 'mobile-node selected' : 'mobile-node');
+      nodeGroup.append(circle);
+    }
+  });
+
+  const activePoints = scenario.path.map((_, index) => mobilePoint(scenario, index));
+  const d = activePoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+  const guide = document.createElementNS(namespace, 'path');
+  guide.setAttribute('d', d);
+  guide.setAttribute('class', 'mobile-route-guide');
+  const path = document.createElementNS(namespace, 'path');
+  path.setAttribute('d', d);
+  path.setAttribute('class', 'mobile-active-path');
+  path.setAttribute('data-mobile-active-path', 'true');
+  path.setAttribute('pathLength', '100');
+  path.setAttribute('marker-end', 'url(#mobile-route-arrow)');
+
+  svg.append(planeGroup, guide, path, nodeGroup);
+  host.prepend(svg);
+  if (status) {
+    status.textContent = scenario.title;
+    status.dataset.settled = reduceMotion ? 'true' : 'false';
+    if (!reduceMotion) {
+      mobileSettleTimer = setTimeout(() => {
+        if (status.textContent === scenario.title) status.dataset.settled = 'true';
+      }, 640);
+    }
+  }
 }
 
 function fallbackPoint(scenario, planeIndex) {
@@ -349,7 +463,9 @@ function renderFallback(scenario) {
 function fallback(error) {
   console.warn('Using semantic topology fallback', error);
   fallbackMode = true;
+  mobileMode = false;
   document.documentElement.dataset.topologyState = 'fallback';
+  host.classList.remove('topology-mobile');
   host.classList.add('topology-fallback');
   renderFallback(selectedScenario);
 }
@@ -363,13 +479,24 @@ function supportsWebGL() {
   }
 }
 
-function initScene() {
+async function initScene() {
+  if (shouldUseMobileTopology()) {
+    mobileMode = true;
+    fallbackMode = false;
+    document.documentElement.dataset.topologyState = 'mobile';
+    host.classList.remove('topology-fallback');
+    host.classList.add('topology-mobile');
+    renderMobileTopology(selectedScenario);
+    return;
+  }
   if (!supportsWebGL()) {
     fallback(new Error('WebGL is unavailable in this browser environment.'));
     return;
   }
+  THREE = await import('./assets/vendor/three/three.module.min.js');
+  initializePlanePositions();
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.65));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setClearColor(0x031421, 0);
   host.prepend(renderer.domElement);
@@ -392,16 +519,17 @@ function initScene() {
 }
 
 if (host) {
-  try {
-    initScene();
-  } catch (error) {
-    fallback(error);
-  }
+  initScene().catch(error => fallback(error));
   addEventListener('resize', resize, { passive: true });
   addEventListener('topology:scenario', event => {
     selectedScenario = event.detail.scenario;
-    if (fallbackMode) renderFallback(selectedScenario);
+    if (mobileMode) renderMobileTopology(selectedScenario);
+    else if (fallbackMode) renderFallback(selectedScenario);
     else animateScenario(selectedScenario);
   });
-  addEventListener('pagehide', () => { disposed = true; renderer?.dispose(); });
+  addEventListener('pagehide', () => {
+    disposed = true;
+    clearTimeout(mobileSettleTimer);
+    renderer?.dispose();
+  });
 }
