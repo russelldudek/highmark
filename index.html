@@ -1,1 +1,225 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#070b18"><title>HighmarkAIROI</title><style>:root{--line:rgba(255,255,255,.14);--text:#f8fafc;--muted:#a8b3cf;--vh:100dvh}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;height:var(--vh);overflow:hidden;position:fixed;inset:0;background:radial-gradient(circle at 30% 18%,#1d2a60 0,#070b18 46%,#02040a 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;touch-action:none}canvas{position:fixed;inset:0;z-index:1}.panel{position:fixed;z-index:10;background:linear-gradient(180deg,rgba(13,18,35,.96),rgba(7,10,22,.91));border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.44);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);touch-action:auto}#info{left:max(14px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));width:430px;max-width:calc(100vw - 28px);max-height:calc(var(--vh) - 110px);overflow:auto;padding:16px}#details{right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));width:390px;max-width:calc(100vw - 28px);max-height:calc(var(--vh) - 110px);overflow:auto;padding:16px}h1,h2{margin:0 0 8px;line-height:1.12}h1{font-size:22px}h2{font-size:18px}p{margin:0 0 12px;color:var(--muted);font-size:12.5px;line-height:1.46}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.stat{padding:10px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.055)}.num{font-size:22px;font-weight:850;line-height:1}.label{font-size:11px;color:var(--muted);margin-top:4px}.section{font-size:12px;font-weight:800;color:#dbeafe;margin:12px 0 6px}input[type=search]{width:100%;font-size:16px;color:var(--text);background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none}.chips,.buttons,.demo-controls{display:flex;gap:8px;flex-wrap:wrap}.chip{display:inline-flex;gap:6px;align-items:center;padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.06);font-size:11px;cursor:pointer;user-select:none}.chip input{margin:0;accent-color:#7dd3fc}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;box-shadow:0 0 12px currentColor}.edge{width:30px;height:4px;border-radius:99px;display:inline-block;box-shadow:0 0 12px currentColor}.legend-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px;color:var(--muted)}.legend-left{display:flex;align-items:center;gap:7px;color:#eef2ff}button{border:1px solid var(--line);background:rgba(125,211,252,.12);color:#f8fafc;border-radius:10px;padding:9px 11px;font-size:12px;cursor:pointer;touch-action:manipulation}button.primary{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.45)}.pill{display:inline-flex;margin:4px 6px 8px 0;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:11px;color:#dbeafe}.copy{font-size:13px;color:var(--muted);line-height:1.5}.callout{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(125,211,252,.25);background:rgba(125,211,252,.07);font-size:12px;line-height:1.45;color:#e6f7ff}.viewbar{position:fixed;z-index:25;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px;border-radius:999px;border:1px solid var(--line);background:rgba(7,11,24,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 14px 40px rgba(0,0,0,.35);touch-action:auto}body.hide-info #info,body.hide-details #details,body.focus #info,body.focus #details{display:none}.demo{display:none;position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:30;width:min(740px,calc(100vw - 24px));padding:16px;border-radius:20px;border:1px solid rgba(125,211,252,.28);background:linear-gradient(180deg,rgba(8,14,32,.97),rgba(5,9,20,.92));box-shadow:0 24px 80px rgba(0,0,0,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);touch-action:auto}body.demo-running .demo{display:block}body.demo-running #info,body.demo-running #details{opacity:.16;pointer-events:none}.kicker{color:#7dd3fc;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.demo-title{font-size:22px;margin:4px 0 8px}.demo-copy{font-size:13px;color:#c7d2fe}.progress{flex:1 1 230px;height:7px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid rgba(255,255,255,.08)}#prog{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#06b6d4,#f59e0b);transition:width .45s ease}.badge{display:inline-flex;gap:6px;align-items:center;margin:8px 6px 0 0;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:11px}.toast{display:none;position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:70;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.4;background:rgba(15,23,42,.96);border:1px solid rgba(125,211,252,.35);color:#e0f2fe;box-shadow:0 12px 35px rgba(0,0,0,.42);touch-action:auto}.mobile-only{display:none}@media(max-width:900px){#info{left:10px;right:10px;top:max(10px,env(safe-area-inset-top));width:auto;max-width:none;max-height:min(45vh,430px);padding:12px;border-radius:16px}#details{left:10px;right:10px;top:auto;bottom:calc(72px + env(safe-area-inset-bottom));width:auto;max-width:none;max-height:34vh;padding:12px;border-radius:16px}.viewbar{left:8px;right:8px;transform:none;max-height:116px;overflow:auto;border-radius:16px;justify-content:flex-start}.demo{top:max(8px,env(safe-area-inset-top));padding:13px;max-height:48vh;overflow:auto}.demo-title{font-size:18px}.demo-copy{font-size:12px}.grid{grid-template-columns:repeat(4,1fr);gap:6px}.stat{padding:7px}.num{font-size:16px}.label{font-size:9px}.chips,.legend-row{font-size:10px}.mobile-only{display:block}button{padding:10px 11px}}@media(max-width:520px){#info{max-height:42vh}.grid{grid-template-columns:1fr 1fr}.viewbar button{font-size:11px;padding:9px 10px}#details{max-height:34vh}.hide-on-small{display:none}}</style></head><body><canvas id="c"></canvas><div id="toast" class="toast"></div><section class="demo"><div class="kicker" id="dk">Guided tour</div><h2 class="demo-title" id="dt">HighmarkAIROI</h2><p class="demo-copy" id="dc">A graph view of Health Plan Operations AI opportunity, friction, and ROI.</p><div id="badges"></div><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap"><div class="progress"><div id="prog"></div></div><div class="demo-controls"><button id="prevDemo">Back</button><button id="pauseDemo">Pause</button><button id="nextDemo">Next</button><button id="stopDemo">Stop</button><span id="stepCount" style="font-size:12px;color:#a8b3cf;min-width:54px;text-align:right">1/1</span></div></div></section><nav class="viewbar"><button id="infoBtn">Info</button><button id="detailsBtn">Details</button><button id="demoStart" class="primary">Demo</button><button id="focus">Focus</button><button id="full">Full view</button><button id="resetView">Reset</button><button id="fitBtn">Re-center</button><button id="labels">Hide labels</button><button id="flow">Boost flow</button></nav><aside id="info" class="panel"><h1>HighmarkAIROI</h1><p>Self-contained mobile AI roadmap graph. Pinch to zoom. Twist two fingers to rotate. Tap nodes or connection lines for details. Node radius = impact score.</p><p class="mobile-only">Mobile starts graph-first. Use <b>Info</b> and <b>Details</b> in the bottom bar to reopen panels.</p><div class="grid"><div class="stat"><div class="num" id="nodeCount">0</div><div class="label">nodes</div></div><div class="stat"><div class="num" id="linkCount">0</div><div class="label">flows</div></div><div class="stat"><div class="num" id="hotCount">0</div><div class="label">hot edges</div></div><div class="stat"><div class="num" id="roiCount">0</div><div class="label">AI ROI</div></div></div><div class="section">Search</div><input id="searchBox" type="search" placeholder="Try: prior auth, directory, claims, appeals, ROI..."><div class="section hide-on-small">Node types</div><div class="chips hide-on-small" id="types"></div><div class="section hide-on-small">AI maturity / ROI edge colors</div><div class="chips hide-on-small" id="statuses"></div><div class="section hide-on-small">Legend</div><div id="legend" class="hide-on-small"></div><div class="buttons" style="margin-top:12px"><button id="reset">Reset</button><button id="hot">High-friction</button><button id="today">Today ROI</button><button id="hideInfo">Hide info</button><button id="hideDetails">Hide details</button></div><p style="margin-top:12px">Prioritize edges where friction, data readiness, governance fit, adoption, and measurable value overlap.</p></aside><aside id="details" class="panel"><h2>Mission Control</h2><span class="pill">Tap any node or flow</span><p class="copy">Stakeholders are nodes, handoffs are edges, friction is edge weight, edge color is AI maturity/ROI, and node size shows impact.</p><div class="callout">Tap a connection line or moving flow particle to see its AI intervention and ROI posture.</div><div class="callout">Independent exploratory concept demo. Not an official Highmark Health product or endorsement.</div></aside><script src="app.js?v=reset1"></script></body></html>
+<!doctype html>
+<html lang="en" data-topology-state="loading">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#031421">
+  <meta name="description" content="Independent candidate vision by Russell Dudek for Highmark's Artificial Intelligence Consultant role in Health Plan Operations.">
+  <title>Russell Dudek · Highmark AI Operations Candidate Vision</title>
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png">
+  <link rel="stylesheet" href="brand-tokens.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="site-body">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="candidate-wordmark" href="#top" aria-label="Russell Dudek candidate vision home">
+      <span>Russell Dudek</span>
+      <small>AI Operations Consultant</small>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="site-nav" data-site-nav data-open="false" aria-label="Candidate vision">
+      <a href="#value-topology">Value topology</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#entry-plan">90 days</a>
+      <a href="#documents">Documents</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero section-dark">
+      <div class="hero-copy">
+        <div class="employer-lockup">
+          <span class="logo-plate"><img src="assets/brand/highmark-standalone.png" alt="Highmark" width="169" height="41"></span>
+          <p data-independent-label>Candidate vision for Artificial Intelligence (AI) Consultant<br><strong>by Russell Dudek</strong></p>
+        </div>
+        <h1>AI opportunity is abundant.<br><em>Operating value is selective.</em></h1>
+        <p class="hero-lead">Health Plan Operations does not need a longer list of possible use cases. It needs a disciplined way to decide where AI belongs in the work, what evidence must exist, what people retain authority, who owns adoption, and how value becomes measurable.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#value-topology">Explore the decision model</a>
+          <a class="button button-quiet" href="#evidence">See the evidence trail</a>
+        </div>
+      </div>
+
+      <div id="value-topology" class="topology-shell" aria-labelledby="topology-heading">
+        <div class="topology-heading-row">
+          <div>
+            <p class="section-number">01</p>
+            <h2 id="topology-heading">AI Value Topology</h2>
+          </div>
+          <p class="topology-status" data-topology-status data-settled="false" aria-live="polite">Prior authorization completeness</p>
+        </div>
+        <div class="topology-stage">
+          <div class="topology-scene" data-topology-scene aria-hidden="true"></div>
+          <div class="topology-core-copy">
+            <span>Friction</span>
+            <strong>becomes a decision</strong>
+            <span>only when the complete value path is visible.</span>
+          </div>
+        </div>
+        <div class="scenario-controls" data-scenario-controls aria-label="Illustrative workflow scenarios"></div>
+        <button class="reset-control" type="button" data-reset-scenario>Reset illustrative baseline</button>
+      </div>
+    </section>
+
+    <section class="pressure-band section-dark" aria-labelledby="pressure-heading">
+      <div class="section-heading compact">
+        <p class="section-number">Public context</p>
+        <h2 id="pressure-heading">The pressure Highmark is already managing</h2>
+      </div>
+      <div class="pressure-rail">
+        <article><span>01</span><h3>Affordability pressure</h3><p>Highmark reported continuing medical and pharmacy cost headwinds while making operational excellence central to affordability.</p></article>
+        <article><span>02</span><h3>Responsible AI</h3><p>Every use case is risk assessed, human authority stays explicit, and privacy, legal, business, and technical review are built into the posture.</p></article>
+        <article><span>03</span><h3>Adoption at scale</h3><p>Sidekick already supports more than 16,000 users. Value depends on trusted tools becoming part of real work, not remaining demonstrations.</p></article>
+        <article><span>04</span><h3>Administrative efficiency</h3><p>The enterprise estimates more than $240 million in administrative-efficiency savings over three years by rethinking work, roles, and technology.</p></article>
+        <article><span>05</span><h3>Workflow integration</h3><p>Public initiatives such as Laguna Companion and the Abridge collaboration show that the strategic unit is the workflow—not the model by itself.</p></article>
+      </div>
+    </section>
+
+    <section class="scenario-analysis section-light" aria-labelledby="scenario-heading">
+      <div class="section-heading">
+        <p class="section-number">Illustrative discovery state</p>
+        <h2 id="scenario-heading" data-scenario-title>Prior authorization completeness</h2>
+        <p data-scenario-problem>Incomplete or misrouted submissions can create avoidable rework before clinical review.</p>
+      </div>
+      <div class="analysis-layout">
+        <ol class="path-transcript" data-path-transcript aria-label="Five-condition value path"></ol>
+        <aside class="decision-readout">
+          <p class="readout-label">Discovery disposition</p>
+          <h3 data-disposition data-tone="advance">Advance to controlled proof</h3>
+          <p data-disposition-basis></p>
+          <dl>
+            <div><dt>Operating owner</dt><dd data-owner></dd></div>
+            <div><dt>Adoption burden</dt><dd data-adoption></dd></div>
+          </dl>
+          <h4>Measurement categories</h4>
+          <ul class="measurement-list" data-measurement></ul>
+          <div class="boundary-note"><strong>Evidence boundary</strong><p data-public-boundary></p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="decisions" class="decision-section section-light" aria-labelledby="decisions-heading">
+      <div class="section-heading wide">
+        <p class="section-number">02</p>
+        <h2 id="decisions-heading">The role makes the portfolio decidable.</h2>
+        <p>The useful question is not “Can AI do something here?” It is “What should advance, under what authority, with which evidence, and who owns the operating result?”</p>
+      </div>
+      <div class="decision-spectrum">
+        <article class="spectrum-advance"><span>Advance</span><h3>Controlled proof</h3><p>A consequential workflow problem, usable evidence, explicit authority, a real owner, and measurable learning are present.</p></article>
+        <article class="spectrum-assist"><span>Assist</span><h3>Evidence develops</h3><p>Bound AI to preparation, explanation, or routing while provenance, quality, and operating feedback mature.</p></article>
+        <article class="spectrum-hold"><span>Hold</span><h3>Readiness first</h3><p>Resolve source authority, data quality, integration, policy, stewardship, or ownership before expanding automation.</p></article>
+        <article class="spectrum-human"><span>Human-led</span><h3>Support bounded</h3><p>Use AI to improve context and consistency while keeping consequential judgment and relationship ownership with people.</p></article>
+        <article class="spectrum-stop"><span>Stop</span><h3>Not appropriate</h3><p>Do not advance when the intervention conflicts with human authority, trust, policy, risk, or a defensible value case.</p></article>
+      </div>
+    </section>
+
+    <section id="mechanism" class="mechanism-section section-dark" aria-labelledby="mechanism-heading">
+      <div class="section-heading wide">
+        <p class="section-number">03</p>
+        <h2 id="mechanism-heading">Install an opportunity charter before installing a model.</h2>
+        <p>A concise operating record makes the problem, evidence, authority, adoption, economics, and stop conditions visible before a promising idea accumulates momentum.</p>
+      </div>
+      <div class="charter-grid" aria-label="AI opportunity charter fields">
+        <div><span>01</span><strong>Workflow problem</strong><p>What friction or decision deserves attention?</p></div>
+        <div><span>02</span><strong>People affected</strong><p>Who performs, receives, governs, or depends on the work?</p></div>
+        <div><span>03</span><strong>Evidence readiness</strong><p>Which systems, data, rules, and sources are authoritative?</p></div>
+        <div><span>04</span><strong>Human authority</strong><p>What must remain a qualified human decision?</p></div>
+        <div><span>05</span><strong>Adoption owner</strong><p>Who changes the workflow, trains teams, and owns exceptions?</p></div>
+        <div><span>06</span><strong>Value evidence</strong><p>Which operating measures prove learning, trust, and impact?</p></div>
+        <div><span>07</span><strong>Scale / stop criteria</strong><p>What evidence advances, bounds, holds, or stops the work?</p></div>
+        <div><span>08</span><strong>Reusable learning</strong><p>What should compound across HPO rather than remain local?</p></div>
+      </div>
+      <a class="text-link light" href="opportunity-charter.html">Open the printable opportunity charter</a>
+    </section>
+
+    <section id="evidence" class="evidence-section section-light" aria-labelledby="evidence-heading">
+      <div class="section-heading wide">
+        <p class="section-number">04</p>
+        <h2 id="evidence-heading">My evidence is not a list of AI claims. It is a pattern of making complex work operable.</h2>
+      </div>
+      <div class="evidence-trail">
+        <article><div class="trail-marker">Now</div><div><p class="trail-org">Vape-Jet · Director of Operations</p><h3>Connect operating signals to accountable work.</h3><p>Leads AI-first operating transformation across production, quality, customer success, support, ERP/Odoo, engineering issue flow, telemetry, training, and standard work in a software-enabled robotics environment.</p></div></article>
+        <article><div class="trail-marker">Build</div><div><p class="trail-org">DudeWorth · Founder / AI and Automation Advisor</p><h3>Qualify opportunity before automating momentum.</h3><p>Develops AI-readiness and opportunity frameworks spanning value, feasibility, data readiness, governance, adoption burden, reuse, time-to-value, human judgment, escalation, evaluation, and controls.</p></div></article>
+        <article><div class="trail-marker">Scale</div><div><p class="trail-org">Amazon · Operations Management / Site Leader</p><h3>Turn ambiguity into mechanisms teams can run.</h3><p>Built customer-backward routines for labor planning, throughput visibility, escalation, standard work, and closed-loop learning in a 24/7 environment supporting approximately five million annual second-day orders.</p></div></article>
+        <article><div class="trail-marker">Trust</div><div><p class="trail-org">Compunetics · Director of Operations and Engineering Management</p><h3>Translate across technical, quality, and operating boundaries.</h3><p>Led engineering, manufacturing, quality, customer delivery, and complex programs in advanced electronics and high-reliability environments using root cause, controls, and performance evidence.</p></div></article>
+      </div>
+      <p class="evidence-conclusion">The transfer is straightforward: read the work deeply, connect technical possibility to operating consequence, retain authority where it belongs, and build a mechanism that people can adopt and leaders can measure.</p>
+    </section>
+
+    <section id="entry-plan" class="entry-section section-dark" aria-labelledby="entry-heading">
+      <div class="section-heading wide">
+        <p class="section-number">05</p>
+        <h2 id="entry-heading">The first 90 days: earn the right to prioritize.</h2>
+        <p>The first deliverable is not a grand roadmap. It is a trusted, evidence-backed way to make the next set of decisions better.</p>
+      </div>
+      <div class="entry-spine">
+        <article><span>Days 1–30</span><h3>Read the work</h3><p>Map current initiatives, workflows, systems, data, policy constraints, human authority, ownership, frontline friction, and existing measures. Listen before prescribing.</p><ul><li>Workflow and stakeholder maps</li><li>Current portfolio inventory</li><li>Evidence and authority gaps</li></ul></article>
+        <article><span>Days 31–60</span><h3>Charter the decisions</h3><p>Establish a common opportunity record and review cadence so business, technical, governance, adoption, and value partners see the same decision.</p><ul><li>Opportunity charters</li><li>Proof and stop criteria</li><li>Adoption and measurement plans</li></ul></article>
+        <article><span>Days 61–90</span><h3>Run controlled proof</h3><p>Advance one or two bounded opportunities, instrument the workflow, capture user feedback, surface exceptions, and return learning to the portfolio.</p><ul><li>Controlled proof briefs</li><li>Operating telemetry</li><li>Scale, hold, or stop review</li></ul></article>
+      </div>
+      <a class="text-link light" href="90-day-plan.html">Review the complete 90-day entry plan</a>
+    </section>
+
+    <section id="questions" class="questions-section section-light" aria-labelledby="questions-heading">
+      <div class="section-heading wide">
+        <p class="section-number">06</p>
+        <h2 id="questions-heading">Questions I would use to discover the real mandate.</h2>
+      </div>
+      <ol class="question-list">
+        <li><span>01</span><p>Where is HPO experiencing the greatest gap between AI interest and implementation capacity?</p></li>
+        <li><span>02</span><p>Which existing use cases have strong executive support but still struggle with workflow ownership or adoption?</p></li>
+        <li><span>03</span><p>At what point do Responsible AI, privacy, legal, and security partners enter the opportunity process today?</p></li>
+        <li><span>04</span><p>Who owns value realization after a proof moves from the AI team into an operating function?</p></li>
+        <li><span>05</span><p>Which HPO workflows generate repeat friction across members, providers, and internal teams?</p></li>
+        <li><span>06</span><p>What would make the first six months unmistakably valuable to the Director of AI and HPO leaders?</p></li>
+      </ol>
+    </section>
+
+    <section id="documents" class="documents-section section-dark" aria-labelledby="documents-heading">
+      <div class="section-heading wide">
+        <p class="section-number">Application materials</p>
+        <h2 id="documents-heading">One argument, expressed through the artifacts the decision requires.</h2>
+      </div>
+      <div class="document-links">
+        <a class="document-primary" href="resume.html"><span>Role-aligned resume</span><strong>Two-page evidence record</strong></a>
+        <a href="cover-letter.html"><span>Cover letter</span><strong>The operating case</strong></a>
+        <a href="interview-brief.html"><span>Interview thesis brief</span><strong>Mandate, tensions, questions</strong></a>
+        <a href="90-day-plan.html"><span>90-day entry plan</span><strong>Read, charter, prove</strong></a>
+        <a href="fit-brief.html"><span>Fit brief</span><strong>Immediate contribution map</strong></a>
+        <a href="opportunity-charter.html"><span>Opportunity charter</span><strong>Printable decision canvas</strong></a>
+      </div>
+      <div class="contact-strip">
+        <p>Russell Dudek · Pittsburgh, Pennsylvania · <a href="tel:+14122878640">412.287.8640</a> · <a href="mailto:russelldudek@gmail.com">russelldudek@gmail.com</a></p>
+        <a class="button button-primary" href="mailto:russelldudek@gmail.com?subject=Highmark%20AI%20Consultant%20candidate%20vision">Contact Russell</a>
+      </div>
+    </section>
+
+    <section class="sources-section section-light" aria-labelledby="sources-heading">
+      <div class="section-heading compact">
+        <p class="section-number">Source integrity</p>
+        <h2 id="sources-heading">Public evidence and explicit assumptions</h2>
+      </div>
+      <div class="source-layout">
+        <ul>
+          <li><a href="https://careers.highmarkhealth.org/artificial-intelligence-ai-consultant/job/2F74264CD05D78DB8BF311E2F1A12F39">Highmark requisition J281843</a></li>
+          <li><a href="https://www.highmarkhealth.org/hmk/responsibility/ai.shtml">Highmark Health AI and Responsible AI</a></li>
+          <li><a href="https://www.highmarkhealth.org/hmk/newsroom/annualreport2025.shtml">Highmark Health 2025 Annual Report</a></li>
+          <li><a href="https://brand.highmarkhealth.org/highmark.html">Highmark brand portal</a></li>
+          <li><a href="https://www.highmarkhealth.org/blog/care/Highmarks-Transformed-Case-Management-Powered-by-Laguna-Companion.shtml">Laguna Companion case-management article</a></li>
+        </ul>
+        <div><p>The scenario model is an independent discovery instrument built from public role and company evidence. It does not claim access to Highmark’s internal processes, systems, data, portfolio, metrics, or decisions.</p><ul class="source-notes" data-source-notes></ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Independent candidate work by Russell Dudek. Not an official Highmark product or endorsement.</p>
+    <p><a href="https://www.linkedin.com/in/russelldudek">LinkedIn</a> · <a href="mailto:russelldudek@gmail.com">Email</a></p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+  <script type="module" src="topology.js"></script>
+</body>
+</html>
