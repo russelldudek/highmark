@@ -1,25 +1,25 @@
-# HighmarkAIROI
+# Highmark AI Operations Candidate Vision
 
-Interactive concept demo for mapping Health Plan Operations as a graph of stakeholders, systems, workflows, AI interventions, friction points, and measurable value.
+An independent candidate vision by Russell Dudek for Highmark's Artificial Intelligence (AI) Consultant role supporting Health Plan Operations, requisition J281843.
 
-## What it shows
+The campaign presents an AI Value Topology: a qualitative decision model for tracing an illustrative workflow opportunity through five conditions—workflow friction, evidence readiness, human authority, adoption ownership, and measurable value—before deciding whether the opportunity should advance, remain bounded, pause, or stop.
 
-- Stakeholders, systems, workflows, AI use cases, and metrics as nodes
-- Directional handoffs as animated links
-- Edge thickness as friction weight
-- Edge color as AI maturity / ROI posture
-- Demo mode walkthrough
-- Filters for high-friction roadmap areas and AI-today ROI opportunities
-- Fullscreen/focus mode and flow boost controls
+## Public experience
 
-## Public site
+- Candidate vision and interactive topology
+- Role-aligned two-page resume
+- One-page cover letter
+- Interview thesis brief
+- 90-day entry plan
+- Immediate contribution brief
+- Printable AI opportunity charter
 
-This repository is intended to publish as a static GitHub Pages site.
+Live candidate vision: https://russelldudek.github.io/highmark/
 
-Suggested public URL:
+## Evidence boundary
 
-`https://russelldudek.github.io/highmark/`
+The workflow scenarios are illustrative discovery hypotheses based on the public job description and public Highmark sources. They do not claim access to Highmark's internal processes, systems, data, portfolio, metrics, or decisions.
 
-## Note
+## Independent work
 
-This is an independent exploratory concept demo. It is not an official Highmark Health product and is not affiliated with or endorsed by Highmark Health.
+This is independent candidate work by Russell Dudek. It is not an official Highmark product, publication, sponsorship, or endorsement. The Highmark mark is used only to identify the target employer and remains unmodified.

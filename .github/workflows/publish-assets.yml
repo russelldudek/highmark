@@ -1,0 +1,52 @@
+name: Build campaign assets
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'assets/vendor/three/**'
+      - 'docs/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install document tooling
+        run: |
+          npm install --no-package-lock --no-save @playwright/test@1.54.1 pdf-lib@1.17.1
+          npx playwright install --with-deps chromium
+      - name: Vendor pinned Three.js runtime
+        run: |
+          mkdir -p assets/vendor/three
+          curl --fail --location --silent --show-error \
+            https://unpkg.com/three@0.170.0/build/three.module.min.js \
+            --output assets/vendor/three/three.module.min.js
+          curl --fail --location --silent --show-error \
+            https://raw.githubusercontent.com/mrdoob/three.js/r170/LICENSE \
+            --output assets/vendor/three/LICENSE
+          echo '08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7  assets/vendor/three/three.module.min.js' | sha256sum --check
+          echo '4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454  assets/vendor/three/LICENSE' | sha256sum --check
+      - name: Generate and validate PDFs
+        run: |
+          node scripts/build-pdfs.mjs
+          node scripts/check-generated-pdfs.mjs
+      - name: Commit generated assets
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/vendor/three docs
+          if git diff --cached --quiet; then
+            echo 'Generated assets already current.'
+          else
+            git commit -m 'Build published campaign assets [skip ci]'
+            git push
+          fi

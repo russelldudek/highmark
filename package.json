@@ -1,0 +1,13 @@
+{
+  "name": "highmark-ai-value-topology",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:pdf": "node scripts/build-pdfs.mjs",
+    "check:pdf": "node scripts/check-generated-pdfs.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.54.1",
+    "pdf-lib": "1.17.1"
+  }
+}
