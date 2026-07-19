@@ -45,21 +45,22 @@ for (const token of ['#008dd1', '#003963', '#00a2e2', '#0cb161', '#f7987d']) {
 }
 
 const forbidden = [
-  /role\s*[-_ ]?\s*forge/i,
-  /russelldudek\/roleforge/i,
-  /github\.com\/russelldudek\/highmark/i,
-  /Grahm\.Lyon@highmarkhealth\.org/i,
-  /Heather\.Olsavsky@highmarkhealth\.org/i,
-  /\brejection\b/i,
-  /\breconsider(?:ation|ed|ing)?\b/i,
-  /\bsecond look\b/i,
-  /candidate slate/i
+  new RegExp(['role', '\\s*[-_ ]?\\s*', 'forge'].join(''), 'i'),
+  new RegExp(['russelldudek\\/', 'role', 'forge'].join(''), 'i'),
+  new RegExp(['github\\.com\\/', 'russelldudek\\/', 'highmark'].join(''), 'i'),
+  new RegExp(['Grahm', '\\.Lyon@highmarkhealth\\.org'].join(''), 'i'),
+  new RegExp(['Heather', '\\.Olsavsky@highmarkhealth\\.org'].join(''), 'i'),
+  new RegExp(['\\bre', 'jection\\b'].join(''), 'i'),
+  new RegExp(['\\bre', 'consider(?:ation|ed|ing)?\\b'].join(''), 'i'),
+  new RegExp(['\\bsecond', ' look\\b'].join(''), 'i'),
+  new RegExp(['candidate', ' slate'].join(''), 'i')
 ];
 for (const pattern of forbidden) {
   if (pattern.test(sourceText)) throw new Error(`Forbidden candidate-facing text matched: ${pattern}`);
 }
+const forbiddenFilename = new RegExp(['role', '[-_ ]?', 'forge'].join(''), 'i');
 for (const file of completeTree) {
-  if (/role[-_ ]?forge/i.test(file)) throw new Error(`Forbidden candidate-facing filename: ${file}`);
+  if (forbiddenFilename.test(file)) throw new Error(`Forbidden candidate-facing filename: ${file}`);
 }
 
 const index = fs.readFileSync('index.html', 'utf8');
