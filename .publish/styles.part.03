@@ -1,0 +1,59 @@
+.plan-phase ul { columns: 2; column-gap: .22in; }
+.charter-sheet { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: .15in; border: 1px solid #bcd0db; }
+.charter-field { min-height: .92in; padding: 10pt; border-right: 1px solid #bcd0db; border-bottom: 1px solid #bcd0db; }
+.charter-field:nth-child(2n) { border-right: 0; }
+.charter-field:nth-last-child(-n+2) { border-bottom: 0; }
+.charter-field span { color: var(--hm-highmark-blue); font-size: 6.7pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.charter-field h3 { margin: 4pt 0; font-size: 9pt; }
+.charter-lines { height: .38in; background: repeating-linear-gradient(to bottom, transparent 0 12pt, #d7e4ea 12pt 13pt); }
+
+@media screen and (max-width: 840px) {
+  .document-actions { position: relative; }
+  .document-shell { width: 100%; margin: 0; }
+  .document-page { width: 100%; min-height: auto; margin: 0 0 16px; padding: 24px 20px 58px; box-shadow: none; overflow: visible; }
+  .document-header, .document-header.compact { grid-template-columns: 1fr; }
+  .document-employer { width: 170px; }
+  .document-summary, .document-hero-band, .two-column, .three-column { grid-template-columns: 1fr; }
+  .capability-band { grid-template-columns: 1fr 1fr; }
+  .topology-mini { grid-template-columns: 1fr; }
+  .plan-phase { grid-template-columns: 54px 1fr; }
+  .plan-phase ul { columns: 1; }
+  .charter-sheet { grid-template-columns: 1fr; }
+  .charter-field, .charter-field:nth-child(2n), .charter-field:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid #bcd0db; }
+  .charter-field:last-child { border-bottom: 0; }
+  .document-footer { left: 20px; right: 20px; bottom: 16px; }
+}
+
+@media print {
+  @page { size: Letter; margin: 0; }
+  html, body.document-body { margin: 0 !important; padding: 0 !important; background: white !important; }
+  .document-actions { display: none !important; }
+  .document-shell { width: 8.5in !important; margin: 0 !important; }
+  .document-page { width: 8.5in !important; height: 11in !important; min-height: 11in !important; margin: 0 !important; padding: .43in .48in .40in !important; box-shadow: none !important; overflow: hidden !important; break-after: page; page-break-after: always; }
+  .document-page:last-child { break-after: auto; page-break-after: auto; }
+  a { text-decoration: none !important; }
+}
+.resume-page .document-section li { font-size: 8.35pt; line-height: 1.38; }
+.resume-page .document-section p { font-size: 8.45pt; line-height: 1.4; }
+.resume-page .experience-entry { margin-top: 9pt; }
+.resume-page .document-metric + .document-metric { margin-top: 6pt; }
+.cover-page .document-letter-body p { font-size: 9.75pt; line-height: 1.5; margin-bottom: 9.5pt; }
+.fit-outcomes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: .12in; background: #bdd2dc; border: 1px solid #bdd2dc; }
+.fit-outcomes div { min-height: .78in; padding: 9pt; background: #f3f9fb; }
+.fit-outcomes span { color: var(--hm-highmark-blue); font-size: 6.5pt; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.fit-outcomes strong { display: block; margin-top: 8pt; color: var(--hm-together-blue); font-size: 8pt; }
+@media screen and (max-width:840px){ .fit-outcomes { grid-template-columns: 1fr 1fr; } }
+
+/* Document-specific refinements */
+.resume-contribution { margin-top: .12in; }
+.letter-topology { margin: 11pt 0 13pt; }
+.cover-letter-page .document-letter-body p { margin-bottom: 10.5pt; font-size: 9.7pt; line-height: 1.5; }
+.cover-letter-page .topology-mini div { min-height: .56in; padding: 6pt; }
+.cover-letter-page .topology-mini strong { font-size: 6.9pt; }
+.cover-letter-page .topology-mini span { font-size: 5.9pt; }
+.resume-bottom-callout { margin-top: .115in; padding: 7.5pt 11pt; }
+.resume-bottom-callout p { margin: 3pt 0 0; }
+.compact-end { margin-top: .11in; }
+.compact-end p { margin-bottom: 0; }
+.letter-next-step { margin: 12pt 0 11pt; padding: 10pt 12pt; }
+.letter-next-step span { display: block; margin-top: 4pt; line-height: 1.4; }
