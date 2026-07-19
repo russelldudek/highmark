@@ -1,11 +1,8 @@
-name: Build and deploy campaign
+name: Build, validate, and deploy candidate campaign
 
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'assets/vendor/three/**'
-      - 'docs/**'
   workflow_dispatch:
 
 permissions:
@@ -14,11 +11,11 @@ permissions:
   id-token: write
 
 concurrency:
-  group: highmark-campaign-pages
+  group: highmark-candidate-campaign-pages
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build-validate-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -30,42 +27,41 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install document tooling
+      - name: Install build and validation dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
           npm install --no-package-lock --no-save @playwright/test@1.54.1 pdf-lib@1.17.1
           npx playwright install --with-deps chromium
-      - name: Vendor pinned Three.js runtime
+      - name: Verify pinned Three.js runtime
         run: |
-          mkdir -p assets/vendor/three
-          curl --fail --location --silent --show-error \
-            https://unpkg.com/three@0.170.0/build/three.module.min.js \
-            --output assets/vendor/three/three.module.min.js
-          curl --fail --location --silent --show-error \
-            https://raw.githubusercontent.com/mrdoob/three.js/r170/LICENSE \
-            --output assets/vendor/three/LICENSE
           echo '08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7  assets/vendor/three/three.module.min.js' | sha256sum --check
           echo '4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454  assets/vendor/three/LICENSE' | sha256sum --check
-      - name: Generate and validate PDFs
+      - name: Generate and validate campaign artifacts
         run: |
-          node scripts/build-pdfs.mjs
-          node scripts/check-generated-pdfs.mjs
-      - name: Commit generated assets
+          npm run test:model
+          npm run build:pdf
+          npm run test:source
+          npm run test:pdf
+      - name: Commit regenerated PDFs when needed
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/vendor/three docs
+          git add docs
           if git diff --cached --quiet; then
-            echo 'Generated assets already current.'
+            echo 'Committed PDFs already match the HTML print source.'
           else
-            git commit -m 'Build published campaign assets [skip ci]'
+            git commit -m 'Refresh validated campaign PDFs [skip ci]'
             git push
           fi
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Upload campaign
+      - name: Upload candidate campaign
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-      - name: Deploy campaign
+      - name: Deploy candidate campaign
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify deployed routes and downloads
+        run: node scripts/verify-live.mjs "${{ steps.deployment.outputs.page_url }}"
