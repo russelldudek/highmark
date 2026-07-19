@@ -1,4 +1,4 @@
-name: Build campaign assets
+name: Build and deploy campaign
 
 on:
   push:
@@ -6,12 +6,22 @@ on:
     paths-ignore:
       - 'assets/vendor/three/**'
       - 'docs/**'
+  workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: highmark-campaign-pages
+  cancel-in-progress: false
 
 jobs:
-  build-assets:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,3 +60,12 @@ jobs:
             git commit -m 'Build published campaign assets [skip ci]'
             git push
           fi
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload campaign
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy campaign
+        id: deployment
+        uses: actions/deploy-pages@v4
