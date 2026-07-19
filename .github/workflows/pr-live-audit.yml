@@ -28,3 +28,4 @@ jobs:
         run: npm run test:pdf
       - name: Verify deployed Pages exactly
         run: node scripts/verify-live.mjs https://russelldudek.github.io/highmark/
+      # This PR refreshes its merge snapshot after the validated PDF commit reaches main.
