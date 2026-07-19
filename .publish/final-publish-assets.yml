@@ -1,0 +1,28 @@
+name: Validate candidate campaign
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install validation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          npm install --no-package-lock --no-save pdf-lib@1.17.1
+      - name: Validate public campaign
+        run: |
+          npm run test:model
+          npm run test:source
+          npm run test:pdf
