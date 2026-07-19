@@ -12,7 +12,17 @@ const expected = new Map([
 ]);
 
 const internalPattern = new RegExp(['role', '\\s*[-_ ]?\\s*', 'forge'].join(''), 'i');
-const decisionReversalPattern = new RegExp(['\\b(?:re', 'jection|reconsider(?:ation|ed|ing)?|second look|candidate slate)\\b'].join(''), 'i');
+const decisionReversalPattern = new RegExp([
+  '\\b(?:',
+  ['re', 'jection'].join(''),
+  '|',
+  ['re', 'consider(?:ation|ed|ing)?'].join(''),
+  '|',
+  ['second', ' look'].join(''),
+  '|',
+  ['candidate', ' slate'].join(''),
+  ')\\b'
+].join(''), 'i');
 const sourceRepoPattern = new RegExp(['github\\.com\\/', 'russelldudek\\/', 'highmark'].join(''), 'i');
 
 for (const [file, pages] of expected) {
