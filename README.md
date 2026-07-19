@@ -14,6 +14,8 @@ The campaign presents an AI Value Topology: a qualitative decision model for tra
 - Immediate contribution brief
 - Printable AI opportunity charter
 
+The downloadable documents are generated from the committed HTML print layouts so the web and PDF versions remain aligned.
+
 Live candidate vision: https://russelldudek.github.io/highmark/
 
 ## Evidence boundary
