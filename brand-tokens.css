@@ -1,0 +1,28 @@
+:root {
+  /* Official Highmark palette from the Highmark brand portal */
+  --hm-highmark-blue: #008dd1;
+  --hm-together-blue: #003963;
+  --hm-swoosh-blue: #00a2e2;
+  --hm-ahn-green: #0cb161;
+  --hm-shade-green: #006d41;
+  --hm-deep-coral: #f7987d;
+  --hm-mist-green: #9cd5ba;
+  --hm-blush: #fac1b3;
+  --hm-bridge-yellow: #fff689;
+
+  /* Candidate-original supporting neutrals */
+  --hm-night: #031421;
+  --hm-depth: #061f31;
+  --hm-ink: #07283d;
+  --hm-paper: #f7fbfd;
+  --hm-white: #ffffff;
+  --hm-muted-on-dark: #a8c1d2;
+  --hm-muted-on-light: #526b7a;
+  --hm-line-dark: rgba(140, 206, 239, 0.18);
+  --hm-line-light: rgba(0, 57, 99, 0.14);
+
+  /* Structural substitutes for Sofia Pro and Plantin MT Pro */
+  --font-display: "Avenir Next", "Century Gothic", "Trebuchet MS", sans-serif;
+  --font-body: "Avenir Next", "Segoe UI", sans-serif;
+  --font-editorial: "Source Serif 4", Georgia, serif;
+}
