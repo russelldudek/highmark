@@ -4,7 +4,12 @@
   "type": "module",
   "scripts": {
     "build:pdf": "node scripts/build-pdfs.mjs",
-    "check:pdf": "node scripts/check-generated-pdfs.mjs"
+    "check:pdf": "node scripts/check-generated-pdfs.mjs",
+    "test:model": "node tests/scenario-model.test.mjs",
+    "test:source": "node scripts/validate-source.mjs",
+    "test:pdf": "node scripts/validate-pdfs.mjs",
+    "verify:live": "node scripts/verify-live.mjs",
+    "test": "npm run test:model && npm run test:source && npm run test:pdf"
   },
   "devDependencies": {
     "@playwright/test": "1.54.1",
