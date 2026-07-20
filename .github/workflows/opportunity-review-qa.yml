@@ -70,7 +70,7 @@ jobs:
       - name: Commit verified staged redesign
         if: success() && hashFiles('scripts/opportunity-review-patch.ready') != ''
         run: |
-          git restore docs
+          git restore docs .github/workflows/publish-assets.yml
           rm -rf node_modules .qa
           git rm -f scripts/opportunity-review-patch.ready scripts/opportunity-review-patch.part-*
           git config user.name 'github-actions[bot]'
