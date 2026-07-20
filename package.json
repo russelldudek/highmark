@@ -1,5 +1,5 @@
 {
-  "name": "highmark-ai-value-topology",
+  "name": "highmark-ai-opportunity-review",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,9 +8,9 @@
     "test:model": "node tests/scenario-model.test.mjs",
     "test:source": "node scripts/validate-source.mjs",
     "test:pdf": "node scripts/validate-pdfs.mjs",
-    "test:network": "node tests/healthcare-network.test.mjs",
+    "test:review": "node tests/opportunity-review.test.mjs",
     "verify:live": "node scripts/verify-live.mjs",
-    "test": "npm run test:model && npm run test:source && npm run test:pdf && npm run test:network"
+    "test": "npm run test:model && npm run test:source && npm run test:pdf && npm run test:review"
   },
   "devDependencies": {
     "@playwright/test": "1.54.1",
