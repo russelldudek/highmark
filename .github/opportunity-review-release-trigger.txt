@@ -1,1 +1,1 @@
-Verify the deployed AI Opportunity Review against the audited main branch.
+Verify the deployed AI Opportunity Review against the final regenerated main branch.
