@@ -1,0 +1,93 @@
+name: Verify AI Opportunity Review release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/opportunity-review-release-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: highmark-opportunity-review-release
+  cancel-in-progress: true
+
+jobs:
+  verify-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install release verification dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          npm install --no-package-lock --no-save @playwright/test@1.54.1 pdf-lib@1.17.1
+          npx playwright install --with-deps chromium
+      - name: Verify committed campaign
+        run: npm test
+      - name: Wait for exact published source
+        run: |
+          for attempt in $(seq 1 12); do
+            if node scripts/verify-live.mjs https://russelldudek.github.io/highmark/; then
+              exit 0
+            fi
+            echo "Published-source verification attempt ${attempt} failed; waiting for Pages propagation."
+            sleep 30
+          done
+          exit 1
+      - name: Verify live interaction and performance contract
+        run: |
+          cat > /tmp/verify-live-review.mjs <<'JS'
+          import assert from 'node:assert/strict';
+          import { chromium } from '@playwright/test';
+          const browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
+          const scenarios = [
+            ['claim-exception-triage', 'Assist while evidence develops'],
+            ['provider-data-confidence', 'Hold for readiness'],
+            ['member-service-preparation', 'Human-led; AI support bounded']
+          ];
+          try {
+            for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 320, height: 800 }]) {
+              const context = await browser.newContext({ viewport, isMobile: viewport.width < 500, hasTouch: viewport.width < 500 });
+              const page = await context.newPage();
+              const threeRequests = [];
+              const errors = [];
+              page.on('request', request => { if (/three(?:\.module)?(?:\.min)?\.js/i.test(request.url())) threeRequests.push(request.url()); });
+              page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+              await page.goto('https://russelldudek.github.io/highmark/?release=opportunity-review', { waitUntil: 'networkidle' });
+              assert.equal(await page.locator('canvas').count(), 0);
+              assert.equal(threeRequests.length, 0);
+              assert.equal(await page.locator('[data-review-row]').count(), 5);
+              assert.equal(await page.locator('[data-decision-memo]').getAttribute('data-state'), 'resolved');
+              assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), true);
+              for (const [id, decision] of scenarios) {
+                await page.locator(`[data-scenario="${id}"]`).click();
+                await page.waitForTimeout(1100);
+                assert.equal((await page.locator('[data-memo-decision]').textContent()).trim(), decision);
+                assert.equal(await page.locator('[data-authority-lock]').getAttribute('data-state'), 'signed');
+                assert.equal(await page.locator('[data-decision-memo]').getAttribute('data-state'), 'resolved');
+              }
+              assert.deepEqual(errors, []);
+              await context.close();
+            }
+          } finally {
+            await browser.close();
+          }
+          console.log('Live AI Opportunity Review interaction and performance contract passed.');
+          JS
+          node /tmp/verify-live-review.mjs
+      - name: Record verification and remove one-time gate
+        run: |
+          printf '\n## AI Opportunity Review release verification\n\n- Complete model, source/confidentiality, PDF, responsive browser, interaction, dependency, and exact-live checks passed.\n- Published experience uses five semantic review decisions, human-authority sign-off, and one connected decision memo with no Three.js or canvas.\n- Verified at: `%s`\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> campaign-audit.md
+          git rm .github/workflows/verify-opportunity-review-release.yml .github/opportunity-review-release-trigger.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add campaign-audit.md
+          git commit -m 'Verify AI Opportunity Review release [skip ci]'
+          git push
