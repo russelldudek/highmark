@@ -20,6 +20,7 @@ jobs:
         run: |
           if [ -f scripts/opportunity-review-patch.ready ]; then
             cat scripts/opportunity-review-patch.part-* > /tmp/opportunity-review-payload.b64
+            echo "$(cat scripts/opportunity-review-patch.ready)  /tmp/opportunity-review-payload.b64" | sha256sum --check
             python - <<'PY'
           from pathlib import Path
           import base64, json, zlib
