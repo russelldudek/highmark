@@ -10,6 +10,7 @@ export const requiredArtifacts = [
   'site-core.css',
   'site-responsive.css',
   'healthcare-network.css',
+  'network-boot.css',
   'documents.css',
   'brand-tokens.css',
   'app.js',

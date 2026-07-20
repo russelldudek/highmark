@@ -1,0 +1,4 @@
+html[data-topology-state="loading"] .topology-shell {
+  min-height: 600px;
+  visibility: hidden;
+}
