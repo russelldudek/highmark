@@ -7,6 +7,7 @@ Independent candidate vision for Highmark's Artificial Intelligence (AI) Consult
 ## Artifact manifest
 
 - Candidate vision: `index.html`
+- AI Opportunity Review controller and responsive visual system
 - Resume: `resume.html` and `docs/Russell-Dudek-Highmark-Resume.pdf`
 - Cover letter: `cover-letter.html` and `docs/Russell-Dudek-Highmark-Cover-Letter.pdf`
 - Interview brief: `interview-brief.html` and `docs/Russell-Dudek-Highmark-Interview-Brief.pdf`
@@ -14,41 +15,47 @@ Independent candidate vision for Highmark's Artificial Intelligence (AI) Consult
 - Immediate contribution brief: `fit-brief.html` and `docs/Russell-Dudek-Highmark-Fit-Brief.pdf`
 - Opportunity charter: `opportunity-charter.html` and `docs/Russell-Dudek-Highmark-Opportunity-Charter.pdf`
 - Brand intelligence and local identity assets
-- Locally pinned Three.js runtime and license
 
-## Verification record
+## Verification contract
 
-- Evidence integrity: passed
-- Candidate-facing confidentiality: passed
-- Public campaign surface scan: passed
-- Forbidden internal-name matches: 0
-- Verified contact information: passed
-- Complete visible candidate-vision URL in application documents: passed
+- Evidence integrity and public-boundary language
+- Candidate-facing confidentiality and complete public-tree scan
+- Verified contact information and candidate-vision links
 - Resume pagination: exactly 2 pages
 - Cover-letter pagination: exactly 1 page
-- Other PDF pagination and footer clearance: passed
-- Reciprocal resume and cover-letter navigation: passed
-- Native PDF downloads: passed
-- Brand color and typography provenance: passed
-- Visible employer identity and independent-candidate distinction: passed
-- Deterministic five-condition scenario model: passed
-- Scenario reset and keyboard navigation: passed
-- Reduced-motion behavior: passed
-- WebGL fallback: passed
-- Desktop, laptop, tablet, mobile, and narrow-mobile overflow checks: passed
-- Print and responsive document-surface checks: passed
-- Value-before-ask and smart starting state: passed
-- Unsupported score, countdown, scarcity, and coercive-copy review: passed
+- Other PDF pagination: exactly 3 / 3 / 2 / 1 pages
+- Reciprocal resume and cover-letter navigation
+- Native PDF downloads
+- Brand color, typography provenance, official identity, and independent-candidate distinction
+- Four materially different workflow scenarios
+- Five distinct review decisions per scenario
+- Human-authority sign-off before memo resolution
+- Rapid selection settles the final request
+- Reset and keyboard operation
+- Reduced-motion immediate resolution
+- Static useful baseline without JavaScript
+- No Three.js request, canvas, WebGL branch, or continuous animation loop
+- Responsive review composition at 1440, 1280, 1024, 768, 430, 390, and 320 pixels
+- Print and responsive document-surface checks
+- Value-before-ask and smart starting state
+- Unsupported score, countdown, scarcity, and coercive-copy review
+- Exact-live deployment equality for all published artifacts
 
+## Visual-fidelity review
 
-## Visual fidelity review
+- The thesis remains the dominant opening argument, preceded by recognizable Highmark identity and a clear independent-work qualifier.
+- The AI Opportunity Review is one connected executive surface rather than an abstract graphics demonstration or card wall.
+- Workflow consequence, evidence readiness, human authority, operating ownership, and proof standard each answer a distinct decision question.
+- The coral authority sign-off is the only lock moment and visibly precedes the issued memo.
+- The memo remains physically connected to the completed review and contains only the portfolio decision, AI/human boundary, first proof design, and operating owner.
+- Motion represents review completion and decision issuance, lasts no longer than approximately 1.05 seconds, and stops completely after settlement.
+- Mobile preserves the same review sequence through deliberate vertical composition rather than a separate or compressed desktop metaphor.
+- The page removes the duplicated discovery transcript, five-posture spectrum, and eight-card charter wall. Public context is reduced to three tensions and executive questions to four.
+- The complete page retains Highmark's documented blue, cyan, green, coral, and yellow recognition layer without impersonating an official company publication.
 
-- Copy and hierarchy: the approved thesis remains the first dominant message, with the candidate identity and independent-work qualifier visible before the interactive model.
-- Composition: the opening viewport uses a deliberate thesis/topology split, keeps the Highmark identity recognizable, and lets the complete decision path carry the visual argument.
-- Causal integrity: every scenario resolves through all five conditions—workflow friction, evidence readiness, human authority, adoption ownership, and measurable value—without detached outcomes or partial routes.
-- Brand system: the official Highmark mark, documented blue/green/coral/yellow tokens, and evidence-based typography substitutes remain consistent across the website and all print artifacts.
-- Responsive art direction: the topology, scenario controls, decision readout, and semantic path transcript remain usable at 1440, 1280, 768, 390, and 320 pixel widths.
-- Intentional refinement: the implementation removes the concept board's circular dashboard treatment, fake metrics, and decorative control-room density in favor of the approved simpler layered topology abstraction.
+## Superseded execution
+
+The Healthcare Intelligence Network was retired because five legitimate decisions were repeated through the network, a second discovery transcript, a five-posture spectrum, and an eight-field charter grid. Its animation visualized infrastructure more than consulting judgment. The replacement makes the review itself the single authoritative explanation and removes the Three.js runtime from the homepage.
 
 ## Evidence boundary
 
@@ -57,9 +64,3 @@ The scenario model is an independent discovery instrument built from public role
 ## Independent-work statement
 
 This campaign is independent candidate work by Russell Dudek and is not an official Highmark product, publication, sponsorship, or endorsement.
-
-## Healthcare Intelligence Network release verification
-
-- Verified public source head: `f9846e24d5538623b1819b677e0edbc22cb7b6e5`
-- Complete model, source/confidentiality, PDF, responsive browser, mobile performance, scenario interaction, and exact-live checks passed in GitHub Actions.
-- Verified at: `2026-07-20T06:12:23Z`

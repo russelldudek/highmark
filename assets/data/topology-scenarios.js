@@ -7,17 +7,38 @@ export const PLANE_ORDER = Object.freeze([
 ]);
 
 export const PLANE_LABELS = Object.freeze({
-  workflow: 'Workflow friction',
-  evidence: 'Evidence + readiness',
+  workflow: 'Workflow consequence',
+  evidence: 'Evidence readiness',
   authority: 'Human authority',
-  adoption: 'Adoption + ownership',
-  value: 'Measurable value'
+  adoption: 'Operating ownership',
+  value: 'Proof standard'
+});
+
+export const REVIEW_ORDER = Object.freeze([
+  'consequence',
+  'evidence',
+  'authority',
+  'ownership',
+  'proof'
+]);
+
+export const REVIEW_LABELS = Object.freeze({
+  consequence: 'Workflow consequence',
+  evidence: 'Evidence readiness',
+  authority: 'Human authority',
+  ownership: 'Operating ownership',
+  proof: 'Proof standard'
 });
 
 export const DEFAULT_SCENARIO_ID = 'prior-auth-completeness';
 
+const freezeReview = review => Object.freeze(Object.fromEntries(
+  Object.entries(review).map(([key, value]) => [key, Object.freeze({ ...value })])
+));
+
 const freezeScenario = value => Object.freeze({
   ...value,
+  review: freezeReview(value.review),
   path: Object.freeze(value.path.map(item => Object.freeze({ ...item }))),
   measurement: Object.freeze([...value.measurement]),
   sourceNotes: Object.freeze([...value.sourceNotes])
@@ -30,6 +51,28 @@ export const SCENARIOS = Object.freeze([
     title: 'Prior authorization completeness',
     illustrative: true,
     problem: 'Incomplete or misrouted submissions can create avoidable rework before clinical review.',
+    review: {
+      consequence: {
+        finding: 'Incomplete or misrouted submissions create avoidable work before clinical review.',
+        implication: 'Focus the intervention on completeness and routing—not coverage judgment.'
+      },
+      evidence: {
+        finding: 'Requirements, submitted documentation, and system context must remain traceable.',
+        implication: 'Ground every assist in authoritative policy and submission evidence.'
+      },
+      authority: {
+        finding: 'Qualified people retain coverage authority.',
+        implication: 'AI may prepare, explain, and route; it does not decide coverage.'
+      },
+      ownership: {
+        finding: 'Utilization Management owns workflow change, exceptions, training, and feedback.',
+        implication: 'A proof has no value without an accountable operating owner.'
+      },
+      proof: {
+        finding: 'Completeness, avoidable rework, turnaround, quality, and adoption must improve together.',
+        implication: 'Advance only as a bounded proof with explicit scale and stop criteria.'
+      }
+    },
     path: [
       { plane: 'workflow', nodeId: 'submission-completeness', label: 'Submission completeness', detail: 'Identify missing information before avoidable pend or reroute.', x: -1.25 },
       { plane: 'evidence', nodeId: 'policy-submission-evidence', label: 'Policy + submission evidence', detail: 'Ground assistance in requirements, submitted documentation, and system context.', x: -0.6 },
@@ -38,6 +81,8 @@ export const SCENARIOS = Object.freeze([
       { plane: 'value', nodeId: 'rework-turnaround-evidence', label: 'Less rework, clearer turnaround evidence', detail: 'Measure completeness, rework, turnaround, quality, and user adoption.', x: 1.35 }
     ],
     owner: 'Utilization Management workflow owner',
+    humanBoundary: 'AI supports completeness and routing; qualified people retain coverage decisions.',
+    proofDesign: 'A bounded completeness-and-routing proof with source traceability, exception review, and operating feedback.',
     adoptionBurden: 'Moderate: workflow integration, criteria stewardship, training, and exception design.',
     measurement: ['submission completeness', 'avoidable rework', 'turnaround time', 'quality / risk', 'adoption'],
     disposition: {
@@ -54,6 +99,28 @@ export const SCENARIOS = Object.freeze([
     title: 'Claim exception triage',
     illustrative: true,
     problem: 'Complex exceptions can consume skilled attention before root cause and ownership are clear.',
+    review: {
+      consequence: {
+        finding: 'Complex exceptions consume skilled attention before root cause and ownership are clear.',
+        implication: 'Separate recurring operating patterns from genuinely complex exceptions.'
+      },
+      evidence: {
+        finding: 'Claim, rule, configuration, and resolution history must remain source-grounded.',
+        implication: 'Expose provenance before AI recommends routing or explanation.'
+      },
+      authority: {
+        finding: 'Authorized staff retain adjudication and payment authority.',
+        implication: 'AI may organize, recommend, and explain; it does not adjudicate.'
+      },
+      ownership: {
+        finding: 'Claims Operations owns taxonomy, escalation, feedback, and root-cause learning.',
+        implication: 'Return repeat causes to the teams accountable for changing the work.'
+      },
+      proof: {
+        finding: 'Exception age, routing accuracy, repeat causes, rework, and adoption must improve together.',
+        implication: 'Begin with bounded assist while authoritative evidence develops.'
+      }
+    },
     path: [
       { plane: 'workflow', nodeId: 'exception-triage', label: 'Exception triage', detail: 'Separate recurring operating patterns from genuinely complex exceptions.', x: 1.2 },
       { plane: 'evidence', nodeId: 'claim-rule-history', label: 'Claim + rule + history context', detail: 'Use source-grounded transaction, configuration, and prior-resolution evidence.', x: 0.45 },
@@ -62,6 +129,8 @@ export const SCENARIOS = Object.freeze([
       { plane: 'value', nodeId: 'ownership-learning', label: 'Faster ownership and reusable learning', detail: 'Measure exception age, rework, routing accuracy, repeat causes, and adoption.', x: -1.35 }
     ],
     owner: 'Claims Operations workflow owner',
+    humanBoundary: 'AI may organize, recommend routing, and explain context; authorized staff retain adjudication and payment authority.',
+    proofDesign: 'A bounded exception-triage assist with rule provenance, escalation review, routing feedback, and repeat-cause learning.',
     adoptionBurden: 'Moderate-high: system integration, rule provenance, exception taxonomy, and feedback discipline.',
     measurement: ['exception age', 'routing accuracy', 'repeat causes', 'rework', 'adoption'],
     disposition: {
@@ -78,6 +147,28 @@ export const SCENARIOS = Object.freeze([
     title: 'Provider-data confidence',
     illustrative: true,
     problem: 'Conflicting provider attributes can create downstream member and provider friction.',
+    review: {
+      consequence: {
+        finding: 'Conflicting provider attributes can create downstream member and provider friction.',
+        implication: 'Target verification queues instead of treating every record as equally uncertain.'
+      },
+      evidence: {
+        finding: 'Source authority, recency, conflict, and provenance must be explicit at field level.',
+        implication: 'Establish a field-level evidence hierarchy before automating changes.'
+      },
+      authority: {
+        finding: 'Accountable data stewards approve material changes.',
+        implication: 'AI may surface confidence and conflicts; stewardship remains human.'
+      },
+      ownership: {
+        finding: 'Provider Data and Network Operations own verification, stewardship, and downstream coordination.',
+        implication: 'Readiness depends on clear queues, source ownership, and consumer feedback.'
+      },
+      proof: {
+        finding: 'Conflict resolution, freshness, failed-contact signals, rework, and adoption must improve together.',
+        implication: 'Hold expansion until source authority and stewardship are operational.'
+      }
+    },
     path: [
       { plane: 'workflow', nodeId: 'record-confidence', label: 'Provider record confidence', detail: 'Identify fields that require verification rather than treating every record equally.', x: -0.85 },
       { plane: 'evidence', nodeId: 'multi-source-evidence', label: 'Multi-source field evidence', detail: 'Compare authoritative sources, recency, conflict, and provenance at field level.', x: 0.1 },
@@ -86,6 +177,8 @@ export const SCENARIOS = Object.freeze([
       { plane: 'value', nodeId: 'downstream-decisions', label: 'Cleaner downstream decisions', detail: 'Measure conflict resolution, verified-field freshness, failed contacts, and adoption.', x: -0.55 }
     ],
     owner: 'Provider Data / Network Operations owner',
+    humanBoundary: 'AI surfaces field-level confidence and conflicts; accountable data stewards approve material changes.',
+    proofDesign: 'A readiness proof that establishes source authority, conflict queues, steward approval, and downstream feedback before automation expands.',
     adoptionBurden: 'High: cross-source governance, accountable stewardship, and downstream change coordination.',
     measurement: ['field conflict resolution', 'data freshness', 'failed-contact signals', 'rework', 'adoption'],
     disposition: {
@@ -102,6 +195,28 @@ export const SCENARIOS = Object.freeze([
     title: 'Member-service preparation',
     illustrative: true,
     problem: 'Agents may spend valuable interaction time assembling context across systems before helping a member.',
+    review: {
+      consequence: {
+        finding: 'Agents may spend valuable interaction time assembling context before helping a member.',
+        implication: 'Improve preparation without displacing the human relationship.'
+      },
+      evidence: {
+        finding: 'Permitted, current, traceable information must retain source links and uncertainty.',
+        implication: 'Present concise context with provenance rather than an opaque summary.'
+      },
+      authority: {
+        finding: 'The service agent owns the interaction and resolution.',
+        implication: 'AI may prepare and explain; the person retains judgment and relationship ownership.'
+      },
+      ownership: {
+        finding: 'Service leadership owns context design, coaching, escalation, and quality routines.',
+        implication: 'The pre-brief must fit the real workflow and its feedback mechanisms.'
+      },
+      proof: {
+        finding: 'Preparation effort, repeat work, quality, trust signals, and adoption must improve together.',
+        implication: 'Keep the posture human-led with AI support deliberately bounded.'
+      }
+    },
     path: [
       { plane: 'workflow', nodeId: 'interaction-preparation', label: 'Interaction preparation', detail: 'Assemble relevant context before the conversation without overwhelming the agent.', x: 0.7 },
       { plane: 'evidence', nodeId: 'source-linked-context', label: 'Source-linked member context', detail: 'Use permitted, current, traceable information with clear uncertainty.', x: -0.25 },
@@ -110,6 +225,8 @@ export const SCENARIOS = Object.freeze([
       { plane: 'value', nodeId: 'meaningful-service', label: 'More time for meaningful service', detail: 'Measure preparation effort, repeat work, quality, trust, and adoption.', x: 0.95 }
     ],
     owner: 'Member Services workflow owner',
+    humanBoundary: 'AI may prepare and explain permitted context; the service agent owns the interaction, judgment, and resolution.',
+    proofDesign: 'A bounded agent pre-brief with source links, uncertainty cues, quality review, coaching feedback, and explicit escalation paths.',
     adoptionBurden: 'Moderate: context design, privacy controls, quality review, coaching, and workflow fit.',
     measurement: ['preparation effort', 'repeat work', 'quality', 'member trust signals', 'adoption'],
     disposition: {
@@ -126,6 +243,6 @@ const scenariosById = new Map(SCENARIOS.map(item => [item.id, item]));
 
 export function getScenario(id) {
   const scenario = scenariosById.get(id);
-  if (!scenario) throw new Error(`Unknown topology scenario: ${id}`);
+  if (!scenario) throw new Error(`Unknown opportunity-review scenario: ${id}`);
   return scenario;
 }

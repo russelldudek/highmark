@@ -41,7 +41,10 @@ for (const file of liveArtifacts) {
 }
 
 const liveIndexText = rootBytes.toString('utf8');
-for (const required of ['AI opportunity is abundant.', 'data-scenario-controls', 'Candidate vision for Artificial Intelligence (AI) Consultant']) {
+for (const required of ['AI opportunity is abundant.', 'AI Opportunity Review', 'data-opportunity-review', 'data-authority-lock', 'data-decision-memo', 'Candidate vision for Artificial Intelligence (AI) Consultant']) {
   if (!liveIndexText.includes(required)) throw new Error(`Live homepage missing required content: ${required}`);
+}
+for (const rejected of ['Healthcare Intelligence Network', 'data-topology-scene', 'three.module.min.js', '<canvas']) {
+  if (liveIndexText.toLowerCase().includes(rejected.toLowerCase())) throw new Error(`Live homepage contains obsolete system: ${rejected}`);
 }
 console.log(`live verification: ${liveArtifacts.length + 1} endpoints exact and current`);
