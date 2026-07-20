@@ -1,0 +1,48 @@
+name: Verify healthcare intelligence network release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/healthcare-network-release-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  verify-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install verification dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          npm install --no-package-lock --no-save @playwright/test@1.54.1 pdf-lib@1.17.1
+          npx playwright install --with-deps chromium
+      - name: Verify committed campaign
+        run: npm test
+      - name: Verify deployed campaign exactly
+        run: |
+          for attempt in 1 2 3 4 5; do
+            if node scripts/verify-live.mjs https://russelldudek.github.io/highmark/; then
+              exit 0
+            fi
+            echo "Live verification attempt ${attempt} failed; waiting for Pages propagation."
+            sleep 30
+          done
+          exit 1
+      - name: Record verification and remove one-time gate
+        run: |
+          printf '\n## Healthcare Intelligence Network release verification\n\n- Verified public source head: `%s`\n- Complete model, source/confidentiality, PDF, responsive browser, mobile performance, scenario interaction, and exact-live checks passed in GitHub Actions.\n- Verified at: `%s`\n' "$GITHUB_SHA" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> campaign-audit.md
+          git rm .github/workflows/verify-healthcare-network-release.yml .github/healthcare-network-release-trigger.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add campaign-audit.md
+          git commit -m 'Verify healthcare intelligence network release [skip ci]'
+          git push
