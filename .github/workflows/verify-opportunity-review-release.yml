@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -34,6 +35,8 @@ jobs:
       - name: Wait for exact published source
         run: |
           for attempt in $(seq 1 12); do
+            git fetch origin main
+            git reset --hard origin/main
             if node scripts/verify-live.mjs https://russelldudek.github.io/highmark/; then
               exit 0
             fi
@@ -84,6 +87,8 @@ jobs:
           node /tmp/verify-live-review.mjs
       - name: Record verification and remove one-time gate
         run: |
+          git fetch origin main
+          git reset --hard origin/main
           printf '\n## AI Opportunity Review release verification\n\n- Complete model, source/confidentiality, PDF, responsive browser, interaction, dependency, and exact-live checks passed.\n- Published experience uses five semantic review decisions, human-authority sign-off, and one connected decision memo with no Three.js or canvas.\n- Verified at: `%s`\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> campaign-audit.md
           git rm .github/workflows/verify-opportunity-review-release.yml .github/opportunity-review-release-trigger.txt
           git config user.name 'github-actions[bot]'
