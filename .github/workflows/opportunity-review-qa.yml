@@ -18,3 +18,11 @@ jobs:
           node-version: '22'
       - name: Run AI Opportunity Review source contract
         run: node tests/opportunity-review.test.mjs
+      - name: Preserve isolated branch snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-review-source
+          path: .
+          include-hidden-files: true
+          retention-days: 1
