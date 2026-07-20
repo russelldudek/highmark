@@ -16,10 +16,25 @@ jobs:
         with:
           ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
-      - name: Apply staged redesign when present
+      - name: Apply staged redesign when complete
         run: |
-          if [ -f scripts/apply_opportunity_review_patch.py ]; then
-            python scripts/apply_opportunity_review_patch.py
+          if [ -f scripts/opportunity-review-patch.ready ]; then
+            cat scripts/opportunity-review-patch.part-* > /tmp/opportunity-review-payload.b64
+            python - <<'PY'
+          from pathlib import Path
+          import base64, json, zlib
+          encoded = Path('/tmp/opportunity-review-payload.b64').read_text().strip()
+          payload = json.loads(zlib.decompress(base64.b64decode(encoded)))
+          for name, content in payload['files'].items():
+              path = Path(name)
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(content)
+          for name in payload['delete']:
+              path = Path(name)
+              if path.exists():
+                  path.unlink()
+          print(f"Applied {len(payload['files'])} files and {len(payload['delete'])} deletions")
+          PY
           fi
       - uses: actions/setup-node@v4
         with:
@@ -48,10 +63,10 @@ jobs:
           if-no-files-found: warn
           retention-days: 3
       - name: Commit verified staged redesign
-        if: success() && hashFiles('scripts/apply_opportunity_review_patch.py') != ''
+        if: success() && hashFiles('scripts/opportunity-review-patch.ready') != ''
         run: |
           git restore docs
-          git rm scripts/apply_opportunity_review_patch.py
+          git rm scripts/opportunity-review-patch.ready scripts/opportunity-review-patch.part-*
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
