@@ -57,3 +57,9 @@ The scenario model is an independent discovery instrument built from public role
 ## Independent-work statement
 
 This campaign is independent candidate work by Russell Dudek and is not an official Highmark product, publication, sponsorship, or endorsement.
+
+## Healthcare Intelligence Network release verification
+
+- Verified public source head: `f9846e24d5538623b1819b677e0edbc22cb7b6e5`
+- Complete model, source/confidentiality, PDF, responsive browser, mobile performance, scenario interaction, and exact-live checks passed in GitHub Actions.
+- Verified at: `2026-07-20T06:12:23Z`
