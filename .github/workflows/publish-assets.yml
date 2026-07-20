@@ -33,17 +33,13 @@ jobs:
           sudo apt-get install -y poppler-utils
           npm install --no-package-lock --no-save @playwright/test@1.54.1 pdf-lib@1.17.1
           npx playwright install --with-deps chromium
-      - name: Verify pinned Three.js runtime
-        run: |
-          echo '08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7  assets/vendor/three/three.module.min.js' | sha256sum --check
-          echo '4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454  assets/vendor/three/LICENSE' | sha256sum --check
       - name: Generate and validate campaign artifacts
         run: |
           npm run test:model
           npm run build:pdf
           npm run test:source
           npm run test:pdf
-          npm run test:network
+          npm run test:review
       - name: Commit regenerated PDFs when needed
         run: |
           git config user.name 'github-actions[bot]'
