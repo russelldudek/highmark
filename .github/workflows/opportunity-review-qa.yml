@@ -6,18 +6,57 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  source-contract:
+  complete-campaign:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+      - name: Apply staged redesign when present
+        run: |
+          if [ -f scripts/apply_opportunity_review_patch.py ]; then
+            python scripts/apply_opportunity_review_patch.py
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run AI Opportunity Review source contract
-        run: node tests/opportunity-review.test.mjs
+      - name: Install validation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          npm install --no-package-lock --no-save @playwright/test@1.54.1 pdf-lib@1.17.1
+          npx playwright install --with-deps chromium
+      - name: Run complete AI Opportunity Review campaign suite
+        run: |
+          npm run test:model
+          npm run build:pdf
+          npm run test:source
+          npm run test:pdf
+          npm run test:review
+      - name: Preserve visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-review-qa
+          path: |
+            .qa/opportunity-review
+            campaign-audit.md
+          if-no-files-found: warn
+          retention-days: 3
+      - name: Commit verified staged redesign
+        if: success() && hashFiles('scripts/apply_opportunity_review_patch.py') != ''
+        run: |
+          git restore docs
+          git rm scripts/apply_opportunity_review_patch.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Build Highmark AI Opportunity Review'
+          git push origin HEAD:${{ github.head_ref }}
       - name: Preserve isolated branch snapshot
         if: always()
         uses: actions/upload-artifact@v4
