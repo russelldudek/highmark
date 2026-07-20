@@ -43,6 +43,7 @@ jobs:
           npm run build:pdf
           npm run test:source
           npm run test:pdf
+          npm run test:network
       - name: Commit regenerated PDFs when needed
         run: |
           git config user.name 'github-actions[bot]'
